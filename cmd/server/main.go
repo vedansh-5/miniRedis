@@ -34,6 +34,6 @@ func handleConnection(conn net.Conn) {
 			fmt.Println("Client disconnected on error: ", err)
 			break
 		}
-		fmt.Println("Received Command: %q\n", args)
+		fmt.Printf("Received Command: %q\n", args)
 	}
 }
