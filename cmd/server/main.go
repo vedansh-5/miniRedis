@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"miniRedis/internal/resp"
 	"net"
 )
 
@@ -26,12 +27,13 @@ func handleConnection(conn net.Conn) {
 	fmt.Println("New client connected.")
 	defer conn.Close()
 	reader := bufio.NewReader(conn) // buffered reader because raw network sockets read in tiny chunks
+	parser := resp.NewParser(reader)
 	for {
-		message, err := reader.ReadString('\n')
+		args, err := parser.Parse()
 		if err != nil {
-			fmt.Println("Client disconnected")
+			fmt.Println("Client disconnected on error: ", err)
 			break
 		}
-		fmt.Println(message)
+		fmt.Println("Received Command: %q\n", args)
 	}
 }
